@@ -1,151 +1,227 @@
-# Diffie-Hellman Key Exchange Web Application
+# 🔐 Diffie–Hellman Key Exchange Web Application
 
-A Python Flask web application demonstrating the Diffie-Hellman key exchange protocol with message encryption and decryption.
+*A Flask-powered interactive demonstration of secure key exchange & message encryption.*
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.7+-blue" />
+  <img src="https://img.shields.io/badge/Framework-Flask-green" />
+  <img src="https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JS-yellow" />
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey" />
+  <img src="https://img.shields.io/badge/Cryptography-Diffie--Hellman-red" />
+</p>
 
-- ✅ Complete Diffie-Hellman key exchange implementation
-- ✅ Visual demonstration of public/private keys
-- ✅ Secure message encryption and decryption
-- ✅ Bidirectional communication between Alice and Bob
-- ✅ Modern, responsive UI
-- ✅ Server-side cryptographic operations using Python
+---
 
-## Installation
+## 📌 Overview
 
-### Prerequisites
+This project is a **fully interactive web application** that demonstrates how the **Diffie–Hellman Key Exchange (DHKE)** works. It visually walks users through generating public/private keys for Alice and Bob, computing a shared secret, and encrypting/decrypting messages using that secret.
 
-- Python 3.7 or higher
-- pip (Python package installer)
+Designed for **students, educators, and cybersecurity beginners**, the app breaks down the entire DH workflow in a clean and intuitive way.
 
-### Setup Steps
+---
 
-1. **Clone or download the project**
+## ✨ Features
+
+* 🔑 **Complete Diffie–Hellman workflow**: private keys, public keys, shared secret
+* 🎭 **Two-party simulation** (Alice & Bob)
+* 🔏 **Message encryption & decryption** using XOR cipher
+* 🔄 **Bidirectional communication**
+* 💡 **Live visualization of key exchange process**
+* 🌐 **Modern, responsive UI** (HTML5, CSS3, JS)
+* 🧮 **Server-side cryptographic logic** implemented in Python
+* 🧼 **Reset system** to start the demo fresh
+
+---
+
+## 🏗️ Tech Stack
+
+### **Backend**
+
+* Python 3.7+
+* Flask
+
+### **Frontend**
+
+* HTML5
+* CSS3
+* Vanilla JavaScript
+
+### **Cryptography**
+
+* Custom Diffie–Hellman implementation
+* XOR cipher for educational message encryption
+
+---
+
+## 📂 Project Structure
+
+```
+diffie-hellman-webapp/
+│
+├── app.py                     # Main Flask backend
+├── requirements.txt           # Dependencies
+├── README.md                  # Documentation
+│
+├── static/
+│   ├── css/
+│   │   └── style.css          # Stylesheet
+│   └── js/
+│       └── main.js            # Frontend logic
+│
+└── templates/
+    └── index.html             # Main interface
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1️⃣ Clone the Repository
 
 ```bash
-mkdir diffie-hellman-webapp
+git clone https://github.com/yourusername/diffie-hellman-webapp.git
 cd diffie-hellman-webapp
 ```
 
-2. **Create a virtual environment (recommended)**
+---
+
+### 2️⃣ Install Dependencies
+
+#### Create & Activate Virtual Environment
 
 ```bash
-# On Windows
+# Windows
 python -m venv venv
 venv\Scripts\activate
 
-# On macOS/Linux
+# macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-3. **Install dependencies**
+#### Install Required Packages
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Run the application**
+---
+
+### 3️⃣ Run the Application
 
 ```bash
 python app.py
 ```
 
-5. **Open your browser**
-   Navigate to: `http://localhost:5000`
+Once running, open the browser and go to:
 
-## Usage
+👉 **[http://localhost:5000](http://localhost:5000)**
 
-1. **Set Public Parameters**: Adjust the prime (p) and generator (g) values if desired
-2. **Start Key Exchange**: Click the "Start Key Exchange" button
-3. **Observe Key Generation**: See how Alice and Bob generate their keys
-4. **Send Encrypted Messages**: Type messages and encrypt them
-5. **Decrypt Messages**: Receive and decrypt messages from the other party
-6. **Reset**: Clear all data and start over
+---
 
-## Project Structure
+## 🧪 How It Works
 
-# Diffie-Hellman Key Exchange Web Application
+### **1. Public Parameters**
 
-# Python Flask Implementation
+Users choose or use default values for:
 
-"""
-PROJECT DIRECTORY STRUCTURE:
-============================
+* Prime modulus **p**
+* Generator **g**
 
-diffie-hellman-webapp/
-│
-├── app.py # Main Flask application
-├── requirements.txt # Python dependencies
-├── README.md # Project documentation
-│
-├── static/
-│ ├── css/
-│ │ └── style.css # Stylesheet
-│ └── js/
-│ └── main.js # JavaScript for interactivity
-│
-└── templates/
-└── index.html # Main HTML template
+### **2. Private & Public Key Generation**
 
-"""
+For each party:
 
-# INSTALLATION & SETUP STEPS:
+```
+private_key = random()
+public_key  = g^private_key mod p
+```
 
-# ===========================
+### **3. Shared Secret Derivation**
 
-#
+Alice computes:
 
-# 1. Create project directory:
+```
+shared = Bob_public^Alice_private mod p
+```
 
-# mkdir diffie-hellman-webapp
+Bob computes:
 
-# cd diffie-hellman-webapp
+```
+shared = Alice_public^Bob_private mod p
+```
 
-#
+Both arrive at the **same secret**, independently.
 
-# 2. Create virtual environment (recommended):
+### **4. Message Encryption**
 
-# python -m venv venv
+A simple educational XOR cipher uses the shared secret to:
 
-#
+* Encrypt outgoing messages
+* Decrypt incoming messages
 
-# # On Windows:
+---
 
-# venv\Scripts\activate
+## 🌐 API Endpoints
 
-#
+| Method | Endpoint         | Description      |
+| ------ | ---------------- | ---------------- |
+| GET    | `/`              | Load main UI     |
+| POST   | `/generate_keys` | Generate DH keys |
+| POST   | `/encrypt`       | Encrypt message  |
+| POST   | `/decrypt`       | Decrypt message  |
 
-# # On macOS/Linux:
+---
 
-# source venv/bin/activate
+## ⚠️ Security Notice
 
-#
+This project is **for educational purposes only**.
 
-# 3. Install dependencies:
+* XOR cipher is **NOT secure**
+* Diffie–Hellman parameters are simplified
+* No padding, no integrity, no authentication
 
-# pip install -r requirements.txt
+For real secure systems, use:
 
-#
+✔ `cryptography`
+✔ `PyCryptodome`
+✔ TLS/SSL-based key exchange
 
-# 4. Run the application:
+---
 
-# python app.py
+## 📸 Optional: Add Screenshots
 
-#
+(Place screenshots in `/static/images/` and embed here)
 
-# 5. Open browser and navigate to:
+```
+![App Screenshot](static/images/screenshot.png)
+```
 
-# http://localhost:5000
+---
 
-#
+## 🧑‍🏫 Ideal For
 
-# 6. To stop the server:
+* Students learning cryptography
+* Teachers demonstrating DHKE
+* Cybersecurity workshops
+* Mini projects / semester projects
+* Flask beginners
 
-# Press Ctrl+C in terminal
+---
 
-#
+## 📝 License
 
-# 7. To deactivate virtual environment:
+This project is licensed under the **MIT License**.
+You are free to use, modify, and distribute it for educational use.
 
-# deactivate
+---
+
+## ⭐ Contribute
+
+Pull requests are welcome! Feel free to open:
+
+* Issues
+* Feature suggestions
+* UI improvements
+
+---
