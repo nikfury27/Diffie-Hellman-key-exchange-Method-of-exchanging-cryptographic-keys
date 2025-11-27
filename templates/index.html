@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diffie-Hellman Key Exchange Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Diffie-Hellman Key Exchange</h1>
+        <p class="subtitle">Secure key exchange demonstration using Python Flask</p>
+
+        <div class="public-params">
+            <h2>Public Parameters (Known to Everyone)</h2>
+            <div class="param-group">
+                <div class="param-item">
+                    <label for="prime">Prime (p):</label>
+                    <input type="number" id="prime" value="23" min="2">
+                </div>
+                <div class="param-item">
+                    <label for="generator">Generator (g):</label>
+                    <input type="number" id="generator" value="5" min="2">
+                </div>
+            </div>
+        </div>
+
+        <div class="parties-container">
+            <div class="party alice">
+                <h2>👩 Alice</h2>
+                <div class="info-box">
+                    <div class="info-label">Private Key (a):</div>
+                    <div class="info-value" id="alice-private">-</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Public Key (A = g^a mod p):</div>
+                    <div class="info-value" id="alice-public">-</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Shared Secret (s = B^a mod p):</div>
+                    <div class="info-value" id="alice-secret">-</div>
+                </div>
+            </div>
+
+            <div class="party bob">
+                <h2>👨 Bob</h2>
+                <div class="info-box">
+                    <div class="info-label">Private Key (b):</div>
+                    <div class="info-value" id="bob-private">-</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Public Key (B = g^b mod p):</div>
+                    <div class="info-value" id="bob-public">-</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Shared Secret (s = A^b mod p):</div>
+                    <div class="info-value" id="bob-secret">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn-start" onclick="startExchange()">Start Key Exchange</button>
+            <button class="btn-reset" onclick="resetExchange()">Reset</button>
+        </div>
+
+        <div class="shared-secret" id="result">
+            <h2>✅ Shared Secret Established!</h2>
+            <p>Both Alice and Bob computed the same secret key:</p>
+            <div class="secret-value" id="shared-value">-</div>
+            <p style="margin-top: 15px; font-size: 0.95em;">This key can now be used for encrypted communication</p>
+        </div>
+
+        <div class="messaging-section" id="messaging">
+            <h2 style="text-align: center; color: #333; margin-bottom: 20px;">📨 Secure Messaging</h2>
+            
+            <div class="message-container">
+                <div class="message-box alice-box">
+                    <h3>👩 Alice Sends Message</h3>
+                    <label class="label-text">Enter Message:</label>
+                    <textarea id="alice-message" placeholder="Type your secret message here..."></textarea>
+                    <button class="btn-encrypt" onclick="encryptMessage('alice')">🔒 Encrypt & Send</button>
+                    
+                    <label class="label-text">Encrypted Message:</label>
+                    <div class="encrypted-display" id="alice-encrypted">No message encrypted yet</div>
+                </div>
+
+                <div class="message-box bob-box">
+                    <h3>👨 Bob Receives & Decrypts</h3>
+                    <label class="label-text">Received Encrypted Message:</label>
+                    <div class="encrypted-display" id="bob-received">Waiting for message...</div>
+                    <button class="btn-decrypt" onclick="decryptMessage('bob')">🔓 Decrypt Message</button>
+                    
+                    <label class="label-text">Decrypted Message:</label>
+                    <div class="decrypted-display" id="bob-decrypted">No message decrypted yet</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;"></div>
+
+            <div class="message-container">
+                <div class="message-box bob-box">
+                    <h3>👨 Bob Sends Message</h3>
+                    <label class="label-text">Enter Message:</label>
+                    <textarea id="bob-message" placeholder="Type your secret message here..."></textarea>
+                    <button class="btn-encrypt" onclick="encryptMessage('bob')" style="background: #4ecdc4;">🔒 Encrypt & Send</button>
+                    
+                    <label class="label-text">Encrypted Message:</label>
+                    <div class="encrypted-display" id="bob-encrypted">No message encrypted yet</div>
+                </div>
+
+                <div class="message-box alice-box">
+                    <h3>👩 Alice Receives & Decrypts</h3>
+                    <label class="label-text">Received Encrypted Message:</label>
+                    <div class="encrypted-display" id="alice-received">Waiting for message...</div>
+                    <button class="btn-decrypt" onclick="decryptMessage('alice')" style="background: #ff6b6b;">🔓 Decrypt Message</button>
+                    
+                    <label class="label-text">Decrypted Message:</label>
+                    <div class="decrypted-display" id="alice-decrypted">No message decrypted yet</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h3>How It Works:</h3>
+            <ol>
+                <li><strong>Public Parameters:</strong> Alice and Bob agree on a prime number (p) and a generator (g). These are public.</li>
+                <li><strong>Private Keys:</strong> Alice chooses a secret number 'a', Bob chooses secret number 'b'.</li>
+                <li><strong>Public Keys:</strong> Alice computes A = g^a mod p and sends to Bob. Bob computes B = g^b mod p and sends to Alice.</li>
+                <li><strong>Shared Secret:</strong> Alice computes s = B^a mod p. Bob computes s = A^b mod p. Both get the same result!</li>
+                <li><strong>Security:</strong> An eavesdropper sees p, g, A, and B, but cannot easily compute 'a' or 'b' (discrete logarithm problem).</li>
+                <li><strong>Encryption:</strong> The shared secret is used as a key to encrypt/decrypt messages. The encryption is handled server-side using Python!</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
